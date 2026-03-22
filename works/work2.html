@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body 个人安全设备 | 作品详情 | Qingze Tao</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- GSAP 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#111111',
+                        secondary: '#333333',
+                        accent: '#0066ff',
+                        light: '#f5f5f5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-balance {
+                text-wrap: balance;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            .transition-transform {
+                transition-property: transform;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 300ms;
+            }
+            .hover-scale {
+                @apply hover:scale-105 transition-transform duration-300;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .nav-shadow {
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+        }
+    </style>
+    
+    <style>
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* 图片查看器样式 */
+        .image-viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-viewer.active {
+            display: flex;
+        }
+        
+        .image-viewer img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .image-viewer-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        /* 淡入动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-white text-primary font-sans">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full bg-white bg-opacity-95 nav-shadow py-4 z-50">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="text-2xl font-bold text-primary">Qingze Tao</a>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex ml-auto space-x-8">
+                    <a href="../index.html" class="text-secondary hover:text-accent transition-colors">Home</a>
+                    <a href="../index.html#works" class="text-secondary hover:text-accent transition-colors">Works</a>
+                    <a href="../index.html#about" class="text-secondary hover:text-accent transition-colors">About</a>
+                    <a href="../index.html#contact" class="text-secondary hover:text-accent transition-colors">Contact</a>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button id="menu-toggle" class="md:hidden ml-auto text-primary focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-white hidden absolute top-full left-0 w-full border-t border-gray-100">
+            <div class="container mx-auto px-4 py-4">
+                <a href="../index.html" class="block py-2 text-secondary hover:text-accent">Home</a>
+                <a href="../index.html#works" class="block py-2 text-secondary hover:text-accent">Works</a>
+                <a href="../index.html#about" class="block py-2 text-secondary hover:text-accent">About</a>
+                <a href="../index.html#contact" class="block py-2 text-secondary hover:text-accent">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-16 pb-16">
+        <!-- 作品标题和简介 -->
+        <section class="pt-16 pb-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <h1 class="text-3xl md:text-5xl font-bold mb-4">Body 个人安全设备</h1>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">产品设计</span>
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">智能硬件</span>
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">2024.09 – 2025.01</span>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-8">
+                        为独居人群设计的一款集成电击防护、喷雾反制、照明、摄像等多功能的安全设备。通过握持优化和快速触发机制，在日常通勤、夜间出行等场景中提供即时安全感。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要图片展示 -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="relative cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageViewer('https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/da39f6bef6dc4f5db7c848adace02b4f.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260320224041C2217312C185B324BF30&rrcfp=8a172a1a&x-expires=1774622441&x-signature=AWA%2FJONtYGJ5erXwNfS7AnuWa8M%3D')">
+                        <img src="https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/da39f6bef6dc4f5db7c848adace02b4f.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260320224041C2217312C185B324BF30&rrcfp=8a172a1a&x-expires=1774622441&x-signature=AWA%2FJONtYGJ5erXwNfS7AnuWa8M%3D" alt="Body 个人安全设备" class="w-full h-auto rounded-lg">
+                        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300">
+                            <span class="px-4 py-2 bg-white text-black text-sm font-medium rounded-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 hover:opacity-100">
+                                <i class="fa fa-search-plus mr-2"></i>查看大图
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 项目详情 -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <!-- 左侧：项目概述 -->
+                        <div class="fade-in">
+                            <h2 class="text-2xl font-bold mb-6">项目概述</h2>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                全球独居人口持续增长，但公共安全系统未能完全适应这一变化。针对独居者（尤其是年轻女性）在夜间出行、陌生环境中的安全焦虑，我们设计了这款便携式个人安全设备。
+                            </p>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                设计灵感来源于“握持稳定性”：在实际紧急情况中，用户需要单手快速触发功能。因此我们将主要操作集中在设备正面，通过按压即可激活电击或喷雾模块。设备集成了高压脉冲电击、强光手电、辣椒素喷雾、隐藏式摄像头等功能，并配有磁吸充电接口和双功能显示屏，可显示电量与工作状态。
+                            </p>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                通过紧凑的结构布局（尺寸约128.5×55×24.5mm），实现了功能集成与便携性的平衡，为独居者提供一种“看得见的安全感”。
+                            </p>
+
+                            
+                            <h3 class="text-xl font-semibold mb-4 mt-8">使用工具</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Rhino 3D</span>
+                                <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Keyshot</span>
+                                <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Adobe Illustrator</span>
+                                <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Adobe InDesign</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧：设计过程 -->
+                        <div class="fade-in">
+                            <h2 class="text-2xl font-bold mb-6">设计流程</h2>
+                            
+                            <div class="space-y-8">
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">社会背景与用户调研</h3>
+                                    <p class="text-gray-600">
+                                        通过数据分析发现：欧盟18-29岁女性中有35%经历过性别暴力，且独居群体在紧急情况下的自救能力较弱。确定“安全设备不应仅是被动防护，更应是主动干预的工具”这一设计目标。
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">功能定义与结构规划</h3>
+                                    <p class="text-gray-600">
+                                        整合四大核心模块：高压脉冲电击、强光手电、辣椒素喷雾、隐藏式摄像头。采用磁吸充电和双功能显示屏，确保单手操作的便捷性。
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">握持与交互设计</h3>
+                                    <p class="text-gray-600">
+                                        通过人机工程学分析，将主要触发按钮置于设备前部，用户在自然握持时即可用拇指按压。设备整体采用包裹式造型，增强握持稳定性。
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">技术制图与原型验证</h3>
+                                    <p class="text-gray-600">
+                                        完成详细的技术制图（包含所有模块尺寸），并制作草模验证握持手感与按键位置。根据测试反馈优化了按钮的力度反馈和表面防滑纹理。
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">使用说明与视觉呈现</h3>
+                                    <p class="text-gray-600">
+                                        设计清晰的使用说明图，标注每个功能的激活方式，并完成高质量产品渲染图，展示设备的多种使用场景。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 项目成果 -->
+        <section class="py-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-8">项目成果</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- 成果1 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-cogs text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">功能集成</h3>
+                            <p class="text-gray-600">
+                                在仅128.5×55×24.5mm的紧凑机身内，集成电击、喷雾、照明、摄像、充电、信息显示等6大功能模块，实现全场景防护。
+                            </p>
+                        </div>
+                        
+                        <!-- 成果2 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in" style="transition-delay: 0.2s;">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-hand-pointer-o text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">易用性</h3>
+                            <p class="text-gray-600">
+                                通过优化握持造型和按键布局，确保用户在紧张状态下也能盲操触发，降低应急反应时间。
+                            </p>
+                        </div>
+                        
+                        <!-- 成果3 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in" style="transition-delay: 0.4s;">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-heart text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">社会意义</h3>
+                            <p class="text-gray-600">
+                                针对独居群体安全痛点提出系统性解决方案，项目获得课程教授“选题敏锐、落地扎实”的评价。
+                            </p>
+                        </div>
+                        
+                        <!-- 成果4：图片展示 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in col-span-1 md:col-span-3" style="transition-delay: 0.6s;">
+                            <h3 class="text-lg font-semibold mb-4">项目展示</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageViewer('https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/af7abdf8de6a4195b468437ab02eb364.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260320224547C87938018B520826AE6A&rrcfp=8a172a1a&x-expires=1774622748&x-signature=KjaPFPv6e8rzp3hiK8M81Fqxwow%3D')">
+                                    <img src="https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/af7abdf8de6a4195b468437ab02eb364.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260320224547C87938018B520826AE6A&rrcfp=8a172a1a&x-expires=1774622748&x-signature=KjaPFPv6e8rzp3hiK8M81Fqxwow%3D" alt="Body 个人安全设备设计图" class="w-full h-48 object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300">
+                                        <span class="px-4 py-2 bg-white text-black text-sm font-medium rounded-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 hover:opacity-100">
+                                            <i class="fa fa-search-plus mr-2"></i>查看大图
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageViewer('https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/e57c8bf59d0b472ba9f009b9a786b843.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260320224547C87938018B520826AE6A&rrcfp=8a172a1a&x-expires=1774622748&x-signature=adkfEsj67XyViOSdikOHRhZh0AM%3D')">
+                                    <img src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/e57c8bf59d0b472ba9f009b9a786b843.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260320224547C87938018B520826AE6A&rrcfp=8a172a1a&x-expires=1774622748&x-signature=adkfEsj67XyViOSdikOHRhZh0AM%3D" alt="Body 个人安全设备设计图" class="w-full h-48 object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300">
+                                        <span class="px-4 py-2 bg-white text-black text-sm font-medium rounded-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 hover:opacity-100">
+                                            <i class="fa fa-search-plus mr-2"></i>查看大图
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 相关项目 -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <h2 class="text-2xl font-bold mb-10 text-center">Related Projects</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    <!-- 相关项目1 -->
+                    <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm group fade-in">
+                        <div class="relative overflow-hidden">
+                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/520c2cb70ce74a5e873ecc213be07d49~tplv-a9rns2rl98-image.image?rcl=20251013162436B2ED504F4E124AF921CD&rk3s=8e244e95&rrcfp=2609e108&x-expires=1760948681&x-signature=mHPZrZeJjztdaF94jLEBa09ZNyE%3D" alt="Oitcut Website" class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold mb-1">Oitcut Website</h3>
+                            <p class="text-gray-600 text-sm mb-3">Light theme website with modern typography.</p>
+                            <a href="work2.html" class="text-accent text-sm font-medium hover:underline">View Project</a>
+                        </div>
+                    </div>
+                    
+                    <!-- 相关项目2 -->
+                    <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm group fade-in" style="transition-delay: 0.2s;">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/574e47a1407b482b836e9e65afe0a269~tplv-a9rns2rl98-image.image?rcl=20251013163305F8CF0626CD00FB1D6A39&rk3s=8e244e95&rrcfp=2609e108&x-expires=1760949190&x-signature=JUmkfR89C%2FLnKtiIouqP61rG%2FeE%3D" alt="Gold &amp; Black Branding" class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="p-4">
+                            <h3 class="font-semibold mb-1">Earphone Product Branding</h3>
+                            <p class="text-gray-600 text-sm mb-3">Elegant branding design with gold foil finish on black background.</p>
+                            <a href="work3.html" class="text-accent text-sm font-medium hover:underline">View Project</a>
+                        </div>
+                    </div>
+                    
+                    <!-- 相关项目3 -->
+                    <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm group fade-in" style="transition-delay: 0.4s;">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/19abb3f8a92e47949319b2c891001bc3~tplv-a9rns2rl98-image.image?rcl=20251011114612D6F40923774973B0CC79&amp;rk3s=8e244e95&amp;rrcfp=f06b921b&amp;x-expires=1762746398&amp;x-signature=rZWgL3A83ZsR8JdE68SIeiWy%2FbI%3D" alt="Minimal Tech Product" class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="p-4">
+                            <h3 class="font-semibold mb-1">Minimal Tech Product</h3>
+                            <p class="text-gray-600 text-sm mb-3">Technical drawings and sketches for a consumer product.</p>
+                            <a href="work6.html" class="text-accent text-sm font-medium hover:underline">View Project</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 返回作品列表按钮 -->
+                <div class="text-center mt-12">
+                    <a href="../index.html#works" class="inline-flex items-center px-8 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition duration-300">
+                        Back to All Works
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="py-12 bg-black text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-2xl font-bold">Qingze Tao</h3>
+                    <p class="text-gray-400 mt-2">A designer crafting digital experiences.</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-behance text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-dribbble text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>© 2025 Qingze Tao. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 图片查看器 -->
+    <div id="image-viewer" class="image-viewer">
+        <span class="image-viewer-close" onclick="closeImageViewer()">×</span>
+        <img id="viewer-image" src="" alt="Large image view">
+    </div>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 移动端菜单切换
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white', 'shadow-md');
+                    navbar.classList.remove('bg-opacity-95');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                    navbar.classList.add('bg-opacity-95');
+                }
+            });
+            
+            // 淡入动画
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('active');
+                    }
+                });
+            };
+            
+            // 初始检查
+            fadeInOnScroll();
+            
+            // 滚动时检查
+            window.addEventListener('scroll', fadeInOnScroll);
+        });
+
+        // 图片查看器
+        function openImageViewer(imageSrc) {
+            const viewer = document.getElementById('image-viewer');
+            const viewerImage = document.getElementById('viewer-image');
+            viewerImage.src = imageSrc;
+            viewer.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageViewer() {
+            const viewer = document.getElementById('image-viewer');
+            viewer.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // 点击空白处关闭图片查看器
+        document.getElementById('image-viewer').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeImageViewer();
+            }
+        });
+    </script>
+</body>
+</html>
